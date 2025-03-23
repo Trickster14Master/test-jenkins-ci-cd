@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployment.deployment_name}}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.deployment.app_label}}
+  replicas: {{ .Values.deployment.replicas}}
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: {{ .Values.deployment.strategy_type}} 
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.deployment.app_label}}
+    spec:
+      containers:
+        - name: {{ .Values.spec.containers_name }}
+          image: {{ .Values.spec.containers_image }}
+          env:
+           - name: {{ .Values.spec.env.env_name }}
+             value: {{ .Values.spec.env.env_values }}
+          ports:
+            - containerPort: {{ .Values.spec.port }} 
+          resources:
+            requests:
+              memory: {{ .Values.spec.resources_requests_memory }}
+              cpu: {{ .Values.spec.resources_requests_cpu }}
+            limits:
+              memory: {{ .Values.spec.resources_limits_memory }}
+              cpu: {{ .Values.spec.resources_limits_cpu }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: {{ .Values.deployment.affinity_key}}
+                operator: In
+                values:
+                - {{ .Values.deployment.affinity_value}}
