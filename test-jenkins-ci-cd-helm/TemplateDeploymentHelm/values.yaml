@@ -8,7 +8,7 @@ deployment:
 
 spec:
   containers_name: test-container
-  containers_image: trickstermaster/test-jenkins-ci-cd:95
+  containers_image: trickstermaster/test-jenkins-ci-cd:96
   port: 80
   env:
     env_name: env-test-deploy
